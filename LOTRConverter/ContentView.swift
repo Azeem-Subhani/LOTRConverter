@@ -9,7 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var showExchangeInfo = false;
+    // Modal Opening and Closing State
+    @State var showExchangeInfo: Bool = false;
+    
+    // Currency Amount State
+    @State var leftAmount: String = "";
+    @State var rightAmount: String = "";
     
     var body: some View {
         ZStack {
@@ -31,50 +36,57 @@ struct ContentView: View {
                     .foregroundStyle(.white)
                 // Conversion Section
                 HStack {
-                    // Left Conversion Section
-                    VStack {
-                        // Currency
-                        HStack {
-                            // Currency Image
-                            Image(.silverpiece)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 33)
+                    HStack {
+                        // Left Conversion Section
+                        VStack {
+                            // Currency
+                            HStack {
+                                // Currency Image
+                                Image(.silverpiece)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 33)
+                                
+                                // Currency Text
+                                Text("Silver Piece")
+                                    .font(.headline)
+                                    .foregroundStyle(.white)
+                            }.padding(.bottom, -2)
                             
-                            // Currency Text
-                            Text("Silver Piece")
-                                .font(.headline)
-                                .foregroundStyle(.white)
+                            // Text Field
+                            TextField("Amount", text: $leftAmount)
+                                .textFieldStyle(.roundedBorder)
                         }
+                        // Equal Signf
+                        Image(systemName: "equal")
+                            .font(.largeTitle)
+                            .foregroundStyle(.white)
+                            .symbolEffect(.pulse)
                         
-                        // Text Field
-                        Text("Text Field!")
-                    }
-                    // Equal Sign
-                    Image(systemName: "equal")
-                        .font(.largeTitle)
-                        .foregroundStyle(.white)
-                        .symbolEffect(.pulse)
+                        // Right Conversion Section
+                        VStack {
+                            // Currency
+                            HStack {
+                                // Currency Text
+                                Text("Gold Piece")
+                                    .font(.headline)
+                                    .foregroundStyle(.white)
+                                // Currency Image
+                                Image(.goldpiece)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 33)
+                            }.padding(.bottom, -2)
+                            
+                            // Text Field
+                            TextField("Right Amount", text: $rightAmount)
+                                .textFieldStyle(.roundedBorder)
+                                .multilineTextAlignment(.trailing);
+                        }
+                    }.padding(30)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(.black.opacity(0.5)))
+                }.padding(10)
                     
-                    // Right Conversion Section
-                    VStack {
-                        // Currency
-                        HStack {
-                            // Currency Text
-                            Text("Gold Piece")
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                            // Currency Image
-                            Image(.goldpiece)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 33)
-                        }
-                        
-                        // Text Field
-                        Text("Text Field");
-                    }
-                }
                 Spacer()
                 // Info Button
                 
@@ -88,9 +100,12 @@ struct ContentView: View {
                             .font(.largeTitle)
                             .foregroundStyle(.white)
                     }.padding(.trailing)
+                        .sheet(isPresented: $showExchangeInfo) {
+                            ExchangeInfo()
+                        }
                 }
             }
-            .border(.blue)
+//            .border(.blue)
         }
     }
 }
